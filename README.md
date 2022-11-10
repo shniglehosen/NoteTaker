@@ -17,6 +17,8 @@ An application called Note Taker that can be used to write and save notes. This 
 
 ## Video
 [Video Link of working App](https://drive.google.com/file/d/1ueQiLC18fYqM7U7pkMyDS_aJmXWj7_K2/view)
+<br>
+
 [Video Link for working on Heroku](https://drive.google.com/file/d/1Ca1MQWQYRryCO5AWihKofryFbZObDyBo/view)
 
 
