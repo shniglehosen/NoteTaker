@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {v4: uuidv4, v4} = require ("uuid");
+const {v4: uuidv4} = require ("uuid");
 const fs = require("fs");
-const { notDeepEqual } = require("assert");
-const util = require("util");
+const util = require("../helpers/fsUtils");
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -22,7 +21,7 @@ class Store {
         })
     }
     writeNote(note) {
-        note.id = v4();
+        note.id = uuidv4();
         return this.getNotes()
         .then((notes) => {
             notes.push(notes)
