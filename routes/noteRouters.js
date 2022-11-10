@@ -50,6 +50,17 @@ router.delete("/:id", (req, res)=>{
     const idToDelete = req.params.id;
 
     const notes = JSON.parse(fs.readFileSync('./db/db.json'));
+
+    const trashNote = [];
+
+    for(const note of notes){
+        if (idToDelete !== note.id){
+            trashNote.push(note);
+        }
+    }
+    util.writeToFile("./db/db.json", trashNote);
+
+    return res.json(`${idToDelete} has been deleted`);
 });
 
 module.exports = router;
