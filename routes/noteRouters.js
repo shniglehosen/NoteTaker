@@ -4,44 +4,52 @@ const {v4: uuidv4} = require ("uuid");
 const fs = require("fs");
 const util = require("../helpers/fsUtils");
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+//get route for all notes
+router.get("/", (req, res) => {
+    util
+        .readFromFile("./db/db.json")
+        .then((data) => res.json(JSON.parse(data)));
+});
 
-class Store {
-    read () {
-        return readFile("db/db.json", "utf8");
-    }
-    write(notes){
-        return writeFile("db/db.json", JSON.stringify(notes));
-    }
-    getNotes () {
-        return this.read()
-        .then((notes) => {
-            return JSON.parse(notes);
-        })
-    }
-    writeNote(note) {
-        note.id = uuidv4();
-        return this.getNotes()
-        .then((notes) => {
-            notes.push(notes)
-            return notes;
-        })
-        .then((newNotes) =>{
-            return this.write(newNotes);
-        })
-        .then(()=>{
-            return note;
-        })
-    }
-    deleteNote(id){
-        return this.getNotes()
-        .then((notes)=>{
-            return notes.filter((note)=>{
-                return notDeepEqual.id !== id
-            })
-        })
-    }
-};
+//get route for one note
+router.get("/:id", (req, res)=> {
+    const noteID = req.params.id;
 
-module.exports = new Store()
+    const notes = JSON.parse(fs.readFileSync("./db/dbjson"));
+
+    for (const note of notes){
+        if(noteID === note.id){
+            return res.json(note);
+        }
+    }
+
+    return res.json("Not Found");
+});
+
+//POST route for new
+router.post("/", (req, res) => {
+
+    if(req.body){
+        const {title, text} = req.body;
+
+        const newNote = {
+            id: uuidv4(),
+            title,
+            text,
+        };
+
+        util.readAndAppend(newNote,"./db/db.json");
+        res.json('Note Added!');
+    }else{
+        res.errored('Error adding note');
+    }
+});
+
+router.delete("/:id", (req, res)=>{
+
+    const idToDelete = req.params.id;
+
+    const notes = JSON.parse(fs.readFileSync('./db/db.json'));
+});
+
+module.exports = router;
