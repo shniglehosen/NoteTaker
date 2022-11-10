@@ -1,4 +1,4 @@
-# Note Taker: Moduel 11
+# Note Taker: Module 11
 
 # Table of Contents:
 - [Description](#description)
